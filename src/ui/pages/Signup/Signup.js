@@ -4,25 +4,31 @@ import "./signup.css"
 import {Link} from "react-router-dom"
 import axios from "axios"
 import Settings from "../../../Setting"
-import store from "../../../store"
+import {connect} from "react-redux"
+
 
 class Signup extends React.Component{
   signup=(e)=>{
     e.preventDefault()
     let username = this.username.value
     let password =this.password.value
-    let email =this.email.value
-    let agin=this.agin.value
-    let data={username,password,email,agin}
+    // let email =this.email.value
+    // let agin=this.agin.value
+    let data={username,password}
     axios.post(`${Settings.host}/user/signup`, data).then( res => {
     //  console.log(res.data)
 
      if(res.data.username){
-       store.dispatch({type:"ADD_USER",username:res.data.username})
+      //  console.log(1)
+       this.props.dispatch({type:"SIGN_IN",username:res.data.username})
        localStorage.setItem("userId",res.data.userId)
        this.resForm.reset()
-       this.props.history.push("/sider")
+       this.props.history.push("/dashboard")
       }
+    })
+    .catch(err=>{
+      console.log(err.response.data.msg)
+      this.props.dispatch({type:"SHOW_ALERT",MSG:err.response.data.msg})
     })
   }
 
@@ -37,7 +43,7 @@ class Signup extends React.Component{
                注册
              </h1>
              <p className="slogan">
-               连接小而确定的幸福
+               连接一个个小而确定的幸福
              </p>
            </div>
            <form className="signup-form" onSubmit={this.signup} ref={value=>this.resForm=value}>
@@ -62,4 +68,4 @@ class Signup extends React.Component{
     )
   }
 }
-export default Signup
+export default connect(null)(Signup)

@@ -11,23 +11,32 @@ class Siderbar extends React.Component{
 
   closeBmMenu=()=>{
     this.setState({
-      isOpen:false
+      isOpen:true
     })
   }
   render(){
     console.log(this.props)
+    let authStr = (
+    <div>登录|注册</div>
+  )
+
+  let userInfo = (
+    <div>
+      <Link to="" className="bm-user-left">
+        {this.props.username}
+      </Link>
+      <Link to="" className="bm-user-right">
+        退出
+      </Link>
+    </div>
+  )
     return(
       <div className="siderbar">
         <Menu isOpen={this.state.isOpen}>
           <div className="bm-user-info">
             <img src="http://media.haoduoshipin.com/yummy/default-avatar.png" alt="avatar" />
             <div className="bm-user-auth">
-              <Link to="" className="bm-user-left">
-                weihui
-              </Link>
-              <Link to="" className="bm-user-right">
-                退出
-              </Link>
+              {this.props.denglu?userInfo:authStr}
             </div>
           </div>
 
@@ -46,9 +55,11 @@ class Siderbar extends React.Component{
     )
   }
 }
+
+
 const mapStateToProps =(state)=>({
-  denglu:state.user.denglu,
-  username:state.user.usrename
+  denglu:state.account.denglu,
+  username:state.account.currentUserName
 })
 
 export default connect(mapStateToProps)(Siderbar)
