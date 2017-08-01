@@ -4,6 +4,7 @@ import "./login.css"
 import {Link} from "react-router-dom"
 import Settings from "../../../Setting"
 import axios from "axios"
+import store from "../../../store"
 
 class Login extends React.Component{
   login=(e)=>{
@@ -12,12 +13,18 @@ class Login extends React.Component{
     let password =this.password.value
     let data={username,password}
     axios.post(`${Settings.host}/user/login`, data).then( res => {
-     console.log(res.data)
-    this.props.history.push("/dashboard")
-    })
+    //  console.log(res.data)
+     if(res.data.username){
+       store.dispatch({type:"SIGN_IN",username:res.data.username})
+      localStorage.setItem("userId",res.data.userId)
+        //先清空表单，在跳转侧边业
+        this.resForm.reset()
+       this.props.history.push("/dashboard")
+     }
+  })
     .catch(err=>{
       console.log(err.response.data.msg)
-      
+      store.dispatch({type:"SHOW_ALERT",MSG:err.response.data.msg})
     })
   }
 

@@ -11,6 +11,9 @@ import {Provider} from "react-redux"
 import AlertBox from "./ui/shared/Alert/AlertBox"
 import axios from "axios"
 import Settings from "./Setting"
+import Dish from "./ui/pages/Dish/Dish"
+import Cart from "./ui/pages/Cat/Cat"
+import Dishes from "./ui/pages/Dishes/Dishes"
 
 
 class App extends Component {
@@ -23,8 +26,18 @@ class App extends Component {
         // console.log(res.data)打印 user中的信息，然后user.username
         store.dispatch({type:"SIGN_IN",username:res.data.user.username})
       })
+
+      //LOAD_Dishes
+      axios.get(`${Settings.host}/dishes`)
+      .then(res=>{
+        // console.log(res.data)打印dishes里面三个id msg:读取成功
+        store.dispatch({type:"LOAD_DISHES",dishes:res.data.dishes})
+      })
+
     }
   }
+
+
   render() {
     return (
 
@@ -42,6 +55,9 @@ class App extends Component {
                     <Route path="/signup" component={Signup} />
                     <Route path="/login" component={Login} />
                     <Route path="/dashboard" component={Dashboard} />
+                    <Route path="/dish/:dishId" component={Dish} />
+                    <Route path="/cart" component={Cart} />
+                  <Route path="/dishes" component={Dishes} />
                   </Switch>
               </div>
             </BrowserRouter>

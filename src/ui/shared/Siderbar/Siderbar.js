@@ -9,15 +9,24 @@ class Siderbar extends React.Component{
     isOpen:false
   }
 
+  handleClick= ()=>{
+    //有connect,可以直接用this.props.不用引 store
+    this.props.dispatch({type:"LOG_OUT"})
+    // 浏览器删除保留的ID
+    localStorage.removeItem("userId")
+  }
+
   closeBmMenu=()=>{
     this.setState({
-      isOpen:true
+      isOpen:false
     })
   }
   render(){
-    console.log(this.props)
+    // console.log(this.props)
     let authStr = (
-    <div>登录|注册</div>
+    <div className="choices">
+      <Link to="/login"  onClick={this.closeBmMenu}>登录</Link>|<Link to="/signup"  onClick={this.closeBmMenu}>注册</Link>
+    </div>
   )
 
   let userInfo = (
@@ -25,7 +34,7 @@ class Siderbar extends React.Component{
       <Link to="" className="bm-user-left">
         {this.props.username}
       </Link>
-      <Link to="" className="bm-user-right">
+      <Link to="/" className="bm-user-right" onClick={this.handleClick}>
         退出
       </Link>
     </div>
@@ -46,7 +55,7 @@ class Siderbar extends React.Component{
             <Link onClick={this.closeBmMenu} to="/cart">购物车</Link>
             <Link onClick={this.closeBmMenu} to="/dishes">猜你喜欢</Link>
           </div>
-
+          
           <div className="bm-close-button">
             <button onClick={this.closeBmMenu}>关闭</button>
           </div>
